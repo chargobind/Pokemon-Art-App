@@ -5,12 +5,15 @@ import { CharacterList } from "./components/CharacterList/CharacterList";
 import { useFetch } from "./components/hooks/useFetch";
 import { CharacterSelection } from "./components/CharacterSelection.tsx/CharacterSelection";
 import { CharactersScreen } from "./components/CharactersScreen";
-import { BattleGround } from "./components/Battleground/BattleGround";
+import { WinnerScreen } from "./screens/WinnerScreen";
+import { LoginScreen } from "./screens/LoginScreen";
+import { BattlegroundScreen } from "./screens/BattlegroundScreen";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 export const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isFightGoingOn, setFightStart] = useState(false);
-  const [battleCharacters, setBattleCharacters] = useState([]);
+  const [battleCharacters, setBattleCharacters] = useState(false);
+  const [winner, setWinner] = useState([]);
   const characters = [
     {
       name: "Pikachu",
@@ -54,17 +57,40 @@ console.log('Selected Characters', battleCharacters);
     </h3>
   );
   return (
-    <div className="App">
-      {!isLoggedIn ? <Login setLoggedIn={setIsLoggedIn} /> : null}
-      {isLoggedIn && !isFightGoingOn ? 
-      <CharactersScreen 
-      characters={characters} 
-      setFightStart={setFightStart} 
-      setBattleCharacters={setBattleCharacters}
-      /> : null}
-      {isFightGoingOn ? (
-      <BattleGround battleCharacters={battleCharacters}/> 
-      ) : null }
+<div className="App">
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={<LoginScreen setLoggedIn={setIsLoggedIn} />}
+          />
+          <Route
+            path="/characters"
+            element={
+              <CharactersScreen
+                isLoggedIn={isLoggedIn}
+                characters={characters}
+                setBattleCharacters={setBattleCharacters}
+              />
+            }
+          />
+          <Route
+            path="/winner"
+            element={<WinnerScreen isLoggedIn={isLoggedIn} winner={winner} />}
+          />
+          <Route
+            path="/battleground"
+            element={
+              <BattlegroundScreen
+                isLoggedIn={isLoggedIn}
+                setWinner={setWinner}
+                winner={winner}
+                battleCharacters={battleCharacters}
+              />
+            }
+          />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 };
