@@ -4,12 +4,10 @@ import { useInterval } from "../components/hooks/useInterval";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-export const BattlegroundScreen = ({
-  isLoggedIn,
-  setWinner,
-  winner,
-}) => {
-  const battleCharacters = useSelector((store: any) => store.characters.battleCharacters);
+export const BattlegroundScreen = ({ setWinner, winner }) => {
+  const battleCharacters = useSelector(
+    (store: any) => store.characters.battleCharacters
+  );
   const [fighterOne, fighterTwo] = battleCharacters;
   const [firstAttacks, setFirstAttacks] = useState(false);
   const [secondAttacks, setSecondAttacks] = useState(false);
@@ -17,16 +15,17 @@ export const BattlegroundScreen = ({
   const attacksByFighterTwo = useRef(0);
   const navigate = useNavigate();
 
+  const isLoggedIn = useSelector((state: any) => state.login.isLoggedIn);
 
   if (!isLoggedIn) {
     navigate("/");
   }
 
-
   const handleFightersClash = () => {
     const { name, damagePerHit } = fighterOne;
     setSecondAttacks(false);
     setFirstAttacks(true);
+    //We can check right after, because refs are updated synchronously
     attacksByFighterOne.current += 1;
     if (fighterTwo.health - damagePerHit * attacksByFighterOne.current <= 0) {
       setWinner(name);
@@ -36,9 +35,7 @@ export const BattlegroundScreen = ({
     setTimeout(() => handleSecondFighterAttack(), 2000);
   };
 
-
   useInterval(() => handleFightersClash(), winner ? null : 4000);
-
 
   const handleSecondFighterAttack = () => {
     const { name, damagePerHit } = fighterTwo;
@@ -51,7 +48,6 @@ export const BattlegroundScreen = ({
       return;
     }
   };
-
 
   return (
     <Flex justify={"center"} align={"center"} direction={"column"} h="90vh">
