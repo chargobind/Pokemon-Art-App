@@ -2,7 +2,8 @@ import { configureStore } from '@reduxjs/toolkit'
 	import charactersReducer from './slices/charactersSlice'
 	
 	export default configureStore({
-	  reducer: {
-	    characters: charactersReducer
-	  },
-	})
+		reducer: {
+		  characters: charactersReducer,
+		  login: loginReducer,
+		},
+	  })
