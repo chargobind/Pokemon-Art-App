@@ -1,44 +1,47 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-	export const charactersSlice = createSlice({
-	  name: "characters",
-	  initialState: {
-	    characterList: [
-	      {
-            name: "Pikachu",
-            health: 100,
-            fraction: "Lightening",
-            weapon: "Thunder-Bolt",
-            damagePerHit: 60,
-	      },
-	      {
-            name: "Charizard",
-            health: 100,
-            fraction: "Fire",
-            weapon: "Flame Thrower",
-            damagePerHit: 80,
-	      },
-	      {
-            name: "Zapdos",
-            health: 120,
-            fraction: "Lightening",
-            weapon: "Thunder-Storm",
-            damagePerHit: 90,
-	      },
-	    ],
-	    battleCharacters: [],
-	  },
-	  reducers: {
-	    setBattleCharacters: (state, action) => {
-	      return {
-	        characterList: state.characterList,
-	        battleCharacters: action.payload,
-	      };
-	    },
-	  },
-	});
-	
-	export const { setBattleCharacters } = charactersSlice.actions;
-	
+export const getCharacters = createAsyncThunk(
+	"characters/getCharacters",
+	async () => {
+	  const response = await fetch("http://localhost:8080/characters");
+	  const data = await response.json();
+	  return data;
+	}
+  );
 
-	export default charactersSlice.reducer;
+  export const charactersSlice = createSlice({
+	name: "characters",
+	initialState: {
+	  characterList: [],
+	  status: "idle",
+	  error: null,
+	  battleCharacters: [],
+	},
+	reducers: {
+
+	  setBattleCharacters: (state, action) => {
+		return {
+		  characterList: state.characterList,
+		  battleCharacters: action.payload,
+		};
+	  },
+	},
+	extraReducers(builder) {
+	  builder
+		.addCase(getCharacters.pending, (state, action) => {
+		  state.status = "loading";
+		})
+		.addCase(getCharacters.fulfilled, (state, action) => {
+		  state.status = "succeeded";
+		  state.characterList = action.payload;
+		})
+		.addCase(getCharacters.rejected, (state, action) => {
+		  state.status = "failed";
+		  state.error = action.error;
+		});
+	},
+  });
+  
+  export const { setBattleCharacters } = charactersSlice.actions;
+  
+  export default charactersSlice.reducer;

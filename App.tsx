@@ -21,8 +21,7 @@ export const App = () => {
 	}
   
 	if (error && error instanceof Error) {
-	  //We can use React.Fragment instead of div
-	  //In react we can't render objects or arrays
+
 	  return <>Error: {error.message} </>;
 	}
   

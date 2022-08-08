@@ -4,7 +4,7 @@ import { useInterval } from "../components/hooks/useInterval";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-export const BattlegroundScreen = ({ setWinner, winner }) => {
+eexport const BattlegroundScreen = ({ setWinner, winner }) => {
   const battleCharacters = useSelector(
     (store: any) => store.characters.battleCharacters
   );
@@ -25,7 +25,7 @@ export const BattlegroundScreen = ({ setWinner, winner }) => {
     const { name, damagePerHit } = fighterOne;
     setSecondAttacks(false);
     setFirstAttacks(true);
-    //We can check right after, because refs are updated synchronously
+
     attacksByFighterOne.current += 1;
     if (fighterTwo.health - damagePerHit * attacksByFighterOne.current <= 0) {
       setWinner(name);
