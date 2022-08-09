@@ -9,6 +9,7 @@ import { WinnerScreen } from "./screens/WinnerScreen";
 import { LoginScreen } from "./screens/LoginScreen";
 import { BattlegroundScreen } from "./screens/BattlegroundScreen";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AddCharacterScreen} from "../screens/AddCharacterScreen";
 	
 export const App = () => {
 	const [winner, setWinner] = useState(null);
@@ -21,7 +22,8 @@ export const App = () => {
 	}
   
 	if (error && error instanceof Error) {
-
+	  //We can use React.Fragment instead of div
+	  //In react we can't render objects or arrays
 	  return <>Error: {error.message} </>;
 	}
   
@@ -29,25 +31,14 @@ export const App = () => {
 	  <div className="App">
 		<BrowserRouter>
 		  <Routes>
-			<Route
-			  path="/"
-			  element={<LoginScreen />}
-			/>
-			<Route
-			  path="/characters"
-			  element={<CharactersScreen/>}
-			/>
-			<Route
-			  path="/winner"
-			  element={<WinnerScreen winner={winner} />}
-			/>
+			<Route path="/" element={<LoginScreen />} />
+			<Route path="/characters" element={<CharactersScreen />} />
+			<Route path="/winner" element={<WinnerScreen winner={winner} />} />
+			<Route path="/manageCharacter" element={<AddCharacterScreen />} />
 			<Route
 			  path="/battleground"
 			  element={
-				<BattlegroundScreen
-				  setWinner={setWinner}
-				  winner={winner}
-				/>
+				<BattlegroundScreen setWinner={setWinner} winner={winner} />
 			  }
 			/>
 		  </Routes>
